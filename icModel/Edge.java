@@ -6,6 +6,7 @@ public class Edge {
     private final Vertex from;
     private final Vertex to;
     private final Double pp;
+    private Boolean blocked;
 
     public Vertex getFrom() {
         return from;
@@ -20,10 +21,15 @@ public class Edge {
     }
 
 
-    public Edge(Vertex from, Vertex to, Double pp) {
+    public Edge(Vertex from, Vertex to, Double pp, Boolean blocked) {
         this.from = from;
         this.to = to;
         this.pp = pp;
+        this.blocked = blocked;
+    }
+
+    public Edge(Vertex from, Vertex to, Double pp) {
+        this(from, to, pp, false);
     }
 
     @Override
@@ -36,16 +42,24 @@ public class Edge {
 
     @Override
     public int hashCode() {
-        return Objects.hash(from, to, pp);
+        return Objects.hash(from.getID(), to.getID());
+    }
+
+    public Boolean getBlocked() {
+        return blocked;
+    }
+
+    public void block() {
+        this.blocked = true;
+    }
+
+    public void restore() {
+        this.blocked = true;
     }
 
     @Override
     public String toString() {
-        return "Edge{" +
-                "from=" + from +
-                ", to=" + to +
-                ", pp=" + pp +
-                '}';
+        return "Edge{" + "from=" + from + ", to=" + to + ", pp=" + pp + '}';
     }
 
     public static void main(String[] args) {

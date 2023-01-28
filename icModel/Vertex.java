@@ -4,14 +4,32 @@ import java.util.ArrayList;
 
 public class Vertex {
     private final Integer ID;
-    private final ArrayList<Vertex> adjacentVertices = new ArrayList<>();
+    private final ArrayList<Edge> outEdges = new ArrayList<>();
+    private final ArrayList<Edge> toEdges = new ArrayList<>();
+    private double activateProbability = 0;
 
-    public ArrayList<Vertex> getAdjacentVertices() {
-        return adjacentVertices;
+    public double getActivateProbability() {
+        return activateProbability;
     }
 
-    public void addAdjacentVertex(Vertex v) {
-        this.adjacentVertices.add(v);
+    public void setActivateProbability(double activateProbability) {
+        this.activateProbability = activateProbability;
+    }
+
+    public ArrayList<Edge> getOutEdges() {
+        return outEdges;
+    }
+
+    public void addOutEdge(Edge edge) {
+        this.outEdges.add(edge);
+    }
+
+    public ArrayList<Edge> getToEdges() {
+        return toEdges;
+    }
+
+    public void addToEdge(Edge edge) {
+        this.toEdges.add(edge);
     }
 
     public static Integer getCnt() {
