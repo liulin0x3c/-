@@ -1,5 +1,7 @@
 package icModel;
 
+import java.util.Objects;
+
 public class Edge {
     private final Vertex from;
     private final Vertex to;
@@ -22,6 +24,19 @@ public class Edge {
         this.from = from;
         this.to = to;
         this.pp = pp;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Edge edge = (Edge) o;
+        return Objects.equals(from, edge.from) && Objects.equals(to, edge.to) && Objects.equals(pp, edge.pp);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(from, to, pp);
     }
 
     @Override

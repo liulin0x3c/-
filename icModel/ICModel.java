@@ -7,23 +7,41 @@ import java.nio.file.Paths;
 import java.util.*;
 
 public class ICModel {
+    public Edge[] edges;
+    public Vertex[] vertices;
+    public Vertex[] initiallyVertices;
+    public final int initialNum = 50;
+    public final double pp = 0.1;
+    public final int precision = 1000;
 
-//    private static void creatGraphFromEdges(List<int[]> edges) {
-//        for (int[] edge :
-//                edges) {
-//            int from = edge[0];
-//            int to = edge[1];
-//
-//        }
-//    }
+    private <T> T[] reservoirSampling(T[] objs, int selectNum) {
+        if (objs.length < selectNum) return objs;
+        var random = new Random();
+        T[] selectedObjs = Arrays.copyOf(objs, selectNum);
+        for (int i = selectNum; i < objs.length; i++) {
+            int replaceIdx = random.nextInt(i); // 0 - i-1 共i个
+            //在n中选一个数，数字小于k的概率就是k/m
+            if (replaceIdx < selectNum) {
+                selectedObjs[replaceIdx] = objs[i];
+            }
+        }
+        return selectedObjs;
+    }
 
-    public static void main(String[] args) throws IOException {
-        final Double pp = 0.1;
-        Vertex[] vertices = new Vertex[4039];
+    public ICModel setInitiallyInfectedVerticesRandomly() {
+        initiallyVertices = reservoirSampling(vertices, initialNum);
+        for (var v : initiallyVertices) {
+            v.activate();
+        }
+        return this;
+    }
+
+    public ICModel initICModelFromTxt() throws IOException {
+        vertices = new Vertex[4039];
         for (int i = 0; i < vertices.length; i++) {
             vertices[i] = new Vertex();
         }
-        Edge[] edges = new Edge[88234];
+        edges = new Edge[88234];
         //读取数据
         Path path = Paths.get("C:\\Users\\liuli\\Desktop\\facebook_combined.txt");
         String data = Files.readString(path);
@@ -37,54 +55,46 @@ public class ICModel {
             edges[i] = edge;
             vertices[fromId].addAdjacentVertex(vertices[toId]);
         }
+        return this;
+    }
 
-        // initially infected set S,随机选取50个点
-        final int initialNum = 50;
-        Vertex[] initiallyVertices = new Vertex[initialNum];
-        for (int i = 0; i < initialNum; i++) {
-            initiallyVertices[i] = vertices[i];
-        }
-        var random = new Random();
-        for (int i = initialNum; i < vertices.length; i++) {
-            int replaceIdx = random.nextInt(i); // 0 - i-1 共i个
-            //在n中选一个数，数字小于k的概率就是k/m
-            if (replaceIdx < initialNum) {
-                initiallyVertices[replaceIdx] = vertices[i];
-            }
-        }
-
+    public int spread() {
         // spread
-        Queue<Vertex> infectedVertex = new ArrayDeque<>(List.of(initiallyVertices));
-        System.out.println(infectedVertex.size());
-
-        while (!infectedVertex.isEmpty()) {
-            // 一个时间伦次
-            for (int i = 0; i < infectedVertex.size(); i++) {
-                var v = infectedVertex.poll();
-                for (var adjacentVertex : v.getAdjacentVertices()) {
-                    if (!adjacentVertex.isActivate()) {
-                        var n = random.nextInt(1000);
-                        if (n < pp * 1000) {
-                            adjacentVertex.activate();
-                            infectedVertex.add(adjacentVertex);
-                        }
-                    }
+        Queue<Vertex> disseminatorsQueue = new ArrayDeque<>(List.of(initiallyVertices));
+        while (!disseminatorsQueue.isEmpty()) {
+            var v = disseminatorsQueue.poll();
+            var nonActivateAdjacentVertices = Objects.requireNonNull(v).getAdjacentVertices().stream().filter((Vertex vertex) -> !vertex.isActivate()).toList();
+            for (var adjacentVertex : nonActivateAdjacentVertices) {
+                var n = new Random().nextInt(precision);
+                if (n < pp * precision) {
+                    adjacentVertex.activate();
+                    disseminatorsQueue.offer(adjacentVertex);
                 }
             }
-            System.out.println(infectedVertex.size());
-
-//            int activateCnt = 0;
-//            for (var v : vertices) {
-//                activateCnt += v.isActivate() ? 1 : 0;
-//            }
-//            System.out.println(activateCnt);
         }
+
         int activateCnt = 0;
         for (var v : vertices) {
             activateCnt += v.isActivate() ? 1 : 0;
         }
-        System.out.println(activateCnt);
+        return activateCnt;
+    }
 
+    public ICModel clean() {
+        for (var vertex : vertices) {
+            vertex.deactivate();
+        }
+        for (var vertex : initiallyVertices) {
+            vertex.activate();
+        }
+        return this;
+    }
+
+    public static void main(String[] args) throws IOException {
+        var m = new ICModel().initICModelFromTxt().setInitiallyInfectedVerticesRandomly();
+//        for (int i = 0; i < 100; i++) {
+//            System.out.println(m.clean().spread());
+//        }
     }
 }
 

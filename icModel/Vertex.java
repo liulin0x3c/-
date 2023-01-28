@@ -22,7 +22,7 @@ public class Vertex {
         Vertex.cnt = cnt;
     }
 
-    public void setActivate(boolean activate) {
+    private void setActivate(boolean activate) {
         this.activate = activate;
     }
 
@@ -50,14 +50,13 @@ public class Vertex {
         this.activate = true;
     }
 
+    public void deactivate() {
+        this.activate = false;
+    }
+
     @Override
     public String toString() {
         return "Vertex{" + "activate=" + activate + '}';
     }
 
-    public static void main(String[] args) {
-        new Vertex();
-        new Vertex();
-        System.out.println(new Vertex().getID().toString());
-    }
 }
