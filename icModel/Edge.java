@@ -59,11 +59,10 @@ public class Edge {
 
     @Override
     public String toString() {
-        return "Edge{" + "from=" + from + ", to=" + to + ", pp=" + pp + '}';
+        return "Edge{" + "from=" + from.getID() + ", to=" + to.getID() + ", blocked=" + blocked + '}';
     }
 
     public static void main(String[] args) {
-        System.out.println(new Edge(new Vertex(), new Vertex(), 0.1).toString());
 
     }
 }

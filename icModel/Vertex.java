@@ -1,18 +1,19 @@
 package icModel;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 
 public class Vertex {
     private final Integer ID;
     private final ArrayList<Edge> outEdges = new ArrayList<>();
     private final ArrayList<Edge> toEdges = new ArrayList<>();
-    private double activateProbability = 0;
+    private BigDecimal activateProbability = new BigDecimal(0);
 
-    public double getActivateProbability() {
+    public BigDecimal getActivateProbability() {
         return activateProbability;
     }
 
-    public void setActivateProbability(double activateProbability) {
+    public void setActivateProbability(BigDecimal activateProbability) {
         this.activateProbability = activateProbability;
     }
 
@@ -32,13 +33,6 @@ public class Vertex {
         this.toEdges.add(edge);
     }
 
-    public static Integer getCnt() {
-        return cnt;
-    }
-
-    public static void setCnt(Integer cnt) {
-        Vertex.cnt = cnt;
-    }
 
     private void setActivate(boolean activate) {
         this.activate = activate;
@@ -48,17 +42,12 @@ public class Vertex {
         return ID;
     }
 
-    private static Integer cnt = 0;
     private boolean activate;
 
-    public Vertex() {
-        this(false);
+    public Vertex(Integer ID) {
+        this.ID = ID;
     }
 
-    public Vertex(boolean activate) {
-        this.ID = cnt++;
-        this.activate = activate;
-    }
 
     public boolean isActivate() {
         return activate;
@@ -74,7 +63,12 @@ public class Vertex {
 
     @Override
     public String toString() {
-        return "Vertex{" + "activate=" + activate + '}';
+        return "Vertex{" +
+                "ID=" + ID +
+                ", outEdges=" + outEdges +
+                ", toEdges=" + toEdges +
+                ", activateProbability=" + activateProbability +
+                ", activate=" + activate +
+                '}';
     }
-
 }
