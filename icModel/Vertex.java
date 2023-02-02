@@ -2,73 +2,61 @@ package icModel;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
 
 public class Vertex {
     private final Integer ID;
-    private final ArrayList<Edge> outEdges = new ArrayList<>();
-    private final ArrayList<Edge> toEdges = new ArrayList<>();
-    private BigDecimal activateProbability = new BigDecimal(0);
+    private final ArrayList<Edge> outEdges;
+    private final ArrayList<Edge> inEdges;
+    private Boolean active;
 
-    public BigDecimal getActivateProbability() {
-        return activateProbability;
-    }
-
-    public void setActivateProbability(BigDecimal activateProbability) {
-        this.activateProbability = activateProbability;
+    public Vertex(Integer ID, ArrayList<Edge> outEdges, ArrayList<Edge> inEdges, boolean active) {
+        this.ID = ID;
+        this.outEdges = new ArrayList<>(outEdges);
+        this.inEdges = new ArrayList<>(inEdges);
+        this.active = active;
     }
 
     public ArrayList<Edge> getOutEdges() {
         return outEdges;
     }
 
-    public void addOutEdge(Edge edge) {
-        this.outEdges.add(edge);
+    public ArrayList<Edge> getInEdges() {
+        return inEdges;
     }
 
-    public ArrayList<Edge> getToEdges() {
-        return toEdges;
+    public void addInEdge(Edge e) {
+        inEdges.add(e);
     }
 
-    public void addToEdge(Edge edge) {
-        this.toEdges.add(edge);
+    public void addOutEdge(Edge e) {
+        outEdges.add(e);
     }
 
-
-    private void setActivate(boolean activate) {
-        this.activate = activate;
+    public Boolean getActive() {
+        return active;
     }
+
+    public void setActive(Boolean active) {
+        this.active = active;
+    }
+
+    public List<Integer> getAdjacentVertexId() {
+        return outEdges.stream().map(Edge::getToId).collect(Collectors.toList());
+    }
+
+    public Vertex(Integer ID) {
+        this(ID, new ArrayList<>(), new ArrayList<>(), false);
+    }
+
 
     public Integer getID() {
         return ID;
     }
 
-    private boolean activate;
-
-    public Vertex(Integer ID) {
-        this.ID = ID;
-    }
-
-
-    public boolean isActivate() {
-        return activate;
-    }
-
-    public void activate() {
-        this.activate = true;
-    }
-
-    public void deactivate() {
-        this.activate = false;
-    }
-
     @Override
     public String toString() {
-        return "Vertex{" +
-                "ID=" + ID +
-                ", outEdges=" + outEdges +
-                ", toEdges=" + toEdges +
-                ", activateProbability=" + activateProbability +
-                ", activate=" + activate +
-                '}';
+        return "V{" + "ID=" + ID + ", active=" + active + '}';
     }
 }
