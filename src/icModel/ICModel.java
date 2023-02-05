@@ -93,7 +93,6 @@ public final class ICModel {
     private final Random random = new Random();
 
     private boolean randomlyActivate(double pp) {
-//        return random.nextDouble() < pp;
         return random.nextInt(PRECISION) < pp * PRECISION;
     }
 
@@ -108,26 +107,10 @@ public final class ICModel {
                 continue;
             }
             var toVertex = edge.to();
-            var n = random.nextInt(PRECISION);
-            if (n < edge.pp() * PRECISION) {
+            if (randomlyActivate(edge.pp())) {
                 activeVertexSet.add(toVertex);
                 toVertex.getOutEdges().stream().filter(this::validEdge).forEach(disseminatorsQueue::offer);
             }
-        }
-        return activeVertexSet.size();
-    }
-
-    public int spreadV2(Queue<Vertex> disseminatorsQueue) {
-        while (!disseminatorsQueue.isEmpty()) {
-            var vertex = disseminatorsQueue.poll();
-            vertex.getOutEdges().stream().filter(edge -> !blockedEdgeSet.contains(edge)).map(Edge::to).filter(v -> !activeVertexSet.contains(v)).forEach(adjacentVertex -> {
-                var n = random.nextInt(PRECISION);
-                if (n < PP * PRECISION) {
-                    activeVertexSet.add(adjacentVertex);
-                    disseminatorsQueue.offer(adjacentVertex);
-                }
-            });
-
         }
         return activeVertexSet.size();
     }
@@ -138,24 +121,14 @@ public final class ICModel {
         Collection<Edge> collect = initActiveVertexSet.stream().<Edge>mapMulti((vertex, consumer) -> vertex.getOutEdges().forEach(consumer)).filter(e -> !activeVertexSet.contains(e.to()) && !blockedEdgeSet.contains(e)).toList();
         for (int i = 0; i < SIMULATIONS_NUM; i++) {
             disseminatorsQueue.addAll(collect);
+            activeVertexSet.clear();
+            activeVertexSet.addAll(initActiveVertexSet);
             int spread = spread(disseminatorsQueue);
             sum += spread;
         }
         return sum / (SIMULATIONS_NUM * 1.0);
     }
 
-
-    public double calculateEXPSingleThreadV2() {
-        long sum = 0;
-        Queue<Vertex> disseminatorsQueue = new ArrayDeque<>(vertexMap.size());
-
-        for (int i = 0; i < SIMULATIONS_NUM; i++) {
-            disseminatorsQueue.addAll(initActiveVertexSet);
-            int spread = spreadV2(disseminatorsQueue);
-            sum += spread;
-        }
-        return sum / (SIMULATIONS_NUM * 1.0);
-    }
 
     public Entry<Edge, Double> findBestBlockedEdge() throws InterruptedException {
         try (ExecutorService executorService = Executors.newFixedThreadPool(THREAD_NUM)) {
@@ -189,7 +162,6 @@ public final class ICModel {
             countDownLatch.await();
             System.out.print("\r100%\n");
             System.out.println("the best block edge:");
-            double minEXP = minEntry.exp;
             Edge edge = minEntry.edge;
             this.blockEdge(edge);
             return minEntry;
@@ -223,41 +195,17 @@ public final class ICModel {
         info("finished");
     }
 
-    public void test() {
-        ICModel icModel = new ICModel(this);
-//        Date start = new Date();
-        double v = icModel.calculateEXPSingleThread();
-//        Date end = new Date();
-//        System.out.println("base: \t\t" + (end.getTime() - start.getTime()));
-        System.out.println(v);
-
-    }
-
-    void testV2() {
-        ICModel icModel = new ICModel(this);
-        Date start = new Date();
-        double v = icModel.calculateEXPSingleThreadV2();
-        Date end = new Date();
-        System.out.println("v2    \t\t" + (end.getTime() - start.getTime()));
-        System.out.println(v);
-    }
-
 
     public static void main(String[] args) throws InterruptedException, IOException {
         ICModel icModel = new ICModel();
 
 //        icModel.blockEdgesToMinimizingInfluence();
 
-
-        ExecutorService executorService = Executors.newFixedThreadPool(16);
-        for (int i = 0; i < 100; i++) {
-            executorService.execute(icModel::test);
-            Thread.sleep(10);
-        }
-//        Thread.sleep(10);
-//        executorService.execute(icModel::testV2);
-        executorService.close();
-
+        Date start = new Date();
+        double v = icModel.calculateEXPSingleThread();
+        Date end = new Date();
+        System.out.println("\t\t\t" + (end.getTime() - start.getTime()));
+        System.out.println(v);
 
     }
 }
