@@ -199,14 +199,7 @@ public final class ICModel {
     public static void main(String[] args) throws InterruptedException, IOException {
         ICModel icModel = new ICModel();
 
-//        icModel.blockEdgesToMinimizingInfluence();
-
-        Date start = new Date();
-        double v = icModel.calculateEXPSingleThread();
-        Date end = new Date();
-        System.out.println("\t\t\t" + (end.getTime() - start.getTime()));
-        System.out.println(v);
-
+        icModel.blockEdgesToMinimizingInfluence();
     }
 }
 
