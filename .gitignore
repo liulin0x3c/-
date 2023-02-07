@@ -2,8 +2,6 @@
 out/
 !**/src/main/**/out/
 !**/src/test/**/out/
-data/
 icModel.iml
 .idea/
-src/Main.java
 -.iml

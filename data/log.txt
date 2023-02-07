@@ -1,0 +1,32 @@
+[INFO]	Tue Feb 07 20:15:45 CST 2023 | --------------start--------------
+[INFO]	Tue Feb 07 20:15:46 CST 2023 | --------------start--------------
+[INFO]	Tue Feb 07 20:15:46 CST 2023 | --------------start--------------
+[INFO]	Tue Feb 07 20:15:46 CST 2023 | V: 3293, E: 8859, S: [1456, 440, 170, 2206, 430], BLOCK_EDGES_NUM: 5, SIMULATIONS_NUM: 1000000, THREAD_NUM: 17
+[INFO]	Tue Feb 07 20:15:53 CST 2023 | base: 9.845620999999998
+[INFO]	Tue Feb 07 20:15:53 CST 2023 | loop:1
+[INFO]	Tue Feb 07 20:59:40 CST 2023 | blocked: (2155->2368), exp: 8.097347, all blocked edge: [(2155->2368)]
+[INFO]	Tue Feb 07 20:59:40 CST 2023 | loop:2
+[INFO]	Tue Feb 07 21:48:08 CST 2023 | blocked: (1048->1230), exp: 8.161802, all blocked edge: [(1048->1230), (2155->2368)]
+[INFO]	Tue Feb 07 21:48:08 CST 2023 | loop:3
+[INFO]	Tue Feb 07 22:33:13 CST 2023 | blocked: (1004->1480), exp: 7.755025, all blocked edge: [(1004->1480), (1048->1230), (2155->2368)]
+[INFO]	Tue Feb 07 22:33:13 CST 2023 | loop:4
+[INFO]	Tue Feb 07 23:20:05 CST 2023 | blocked: (3680->3830), exp: 7.808339, all blocked edge: [(1004->1480), (1048->1230), (3680->3830), (2155->2368)]
+[INFO]	Tue Feb 07 23:20:05 CST 2023 | loop:5
+[INFO]	Tue Feb 07 23:31:36 CST 2023 | --------------start--------------
+[INFO]	Tue Feb 07 23:31:36 CST 2023 | --------------start--------------
+[INFO]	Tue Feb 07 23:31:36 CST 2023 | --------------start--------------
+[INFO]	Tue Feb 07 23:31:36 CST 2023 | V: 3293, E: 8859, S: [1456, 440, 170, 2206, 430], BLOCK_EDGES_NUM: 5, SIMULATIONS_NUM: 1000000, THREAD_NUM: 17
+[INFO]	Tue Feb 07 23:31:43 CST 2023 | base: 0.0
+[INFO]	Tue Feb 07 23:31:43 CST 2023 | loop:1
+[INFO]	Tue Feb 07 23:32:35 CST 2023 | --------------start--------------
+[INFO]	Tue Feb 07 23:32:36 CST 2023 | --------------start--------------
+[INFO]	Tue Feb 07 23:32:36 CST 2023 | --------------start--------------
+[INFO]	Tue Feb 07 23:32:36 CST 2023 | V: 3293, E: 8859, S: [1456, 440, 170, 2206, 430], BLOCK_EDGES_NUM: 5, SIMULATIONS_NUM: 1000000, THREAD_NUM: 17
+[INFO]	Tue Feb 07 23:32:42 CST 2023 | base: 0.0
+[INFO]	Tue Feb 07 23:32:42 CST 2023 | loop:1
+[INFO]	Tue Feb 07 23:36:26 CST 2023 | --------------start--------------
+[INFO]	Tue Feb 07 23:36:26 CST 2023 | --------------start--------------
+[INFO]	Tue Feb 07 23:36:26 CST 2023 | --------------start--------------
+[INFO]	Tue Feb 07 23:36:26 CST 2023 | V: 3293, E: 8859, S: [1456, 440, 170, 2206, 430], BLOCK_EDGES_NUM: 5, SIMULATIONS_NUM: 1000000, THREAD_NUM: 17
+[INFO]	Tue Feb 07 23:36:33 CST 2023 | base: 0.0
+[INFO]	Tue Feb 07 23:36:33 CST 2023 | loop:1
