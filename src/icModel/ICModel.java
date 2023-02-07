@@ -143,15 +143,19 @@ public final class ICModel {
 
             System.out.println("start concurrent running");
             System.out.print("0%" + "\r");
-
+            String[] data = new String[noBlockedEdgeList.size()];
+            Holder<Integer> tosHolder = new Holder<>(-1);
             Entry<Edge, Double> minEntry = new Entry<>(null, Double.MAX_VALUE);
             noBlockedEdgeList.forEach(edge -> executorService.execute(() -> {
                 ICModel icModel = Objects.requireNonNull(availableModel.poll());
                 double exp = icModel.blockEdge(edge).calculateEXPSingleThread();
+                synchronized (tosHolder) {
+                    data[++tosHolder.value] = "" + edge + exp;
+                }
                 availableModel.add(icModel.restoreEdge(edge));
-                if (minEntry.exp > exp) {
-                    minEntry.exp = exp;
-                    minEntry.edge = edge;
+                if (minEntry.B > exp) {
+                    minEntry.B = exp;
+                    minEntry.A = edge;
                 }
                 countDownLatch.countDown();
                 long count = countDownLatch.getCount();
@@ -160,9 +164,10 @@ public final class ICModel {
                 }
             }));
             countDownLatch.await();
+            info(String.join(", ", data));
             System.out.print("\r100%\n");
             System.out.println("the best block edge:");
-            Edge edge = minEntry.edge;
+            Edge edge = minEntry.A;
             this.blockEdge(edge);
             return minEntry;
         }
@@ -170,33 +175,33 @@ public final class ICModel {
 
     public void blockEdgesToMinimizingInfluence() throws InterruptedException {
         System.out.println("calculating base");
-        final double[] sum = {0};
+        final Holder<Double> sumHolder = new Holder<>(0d);
         var num = THREAD_NUM;
         CountDownLatch countDownLatch = new CountDownLatch(num);
         for (int i = 0; i < num; i++) {
             new Thread(() -> {
-                var value = new double[]{0d};
-                value[0] = new ICModel(this).calculateEXPSingleThread();
+                double value = new ICModel(this).calculateEXPSingleThread();
                 synchronized (ICModel.class) {
-                    sum[0] = sum[0] + value[0];
+                    sumHolder.value += value;
                 }
                 countDownLatch.countDown();
             }).start();
 
         }
+        Double sum = sumHolder.value;
         countDownLatch.await();
-        var base = sum[0] / num;
+        var base = sum / num;
         info("base: " + base);
         for (int i = 1; i <= BLOCK_EDGES_NUM; i++) {
             info("loop:" + i);
             Entry<Edge, Double> minEntry = findBestBlockedEdge();
-            info("blocked: " + minEntry.edge + ", exp: " + minEntry.exp + ", all blocked edge: " + blockedEdgeSet.stream().toList());
+            info("blocked: " + minEntry.A + ", exp: " + minEntry.B + ", all blocked edge: " + blockedEdgeSet.stream().toList());
         }
         info("finished");
     }
 
 
-    public static void main(String[] args) throws InterruptedException, IOException {
+    public static void main(String[] args) throws InterruptedException {
         ICModel icModel = new ICModel();
 
         icModel.blockEdgesToMinimizingInfluence();

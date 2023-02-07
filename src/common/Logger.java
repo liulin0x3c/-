@@ -19,15 +19,21 @@ public final class Logger {
     private Logger() {
     }
 
-    public synchronized static void info(CharSequence log) {
+    public synchronized static void info(CharSequence log, Boolean display) {
         String time = new Date().toString();
         log = "[INFO]\t" + time + " | " + log;
-        System.out.println(log);
+        if (display) {
+            System.out.println(log);
+        }
         try {
             Files.writeString(path, log + "\n", StandardOpenOption.APPEND);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    public synchronized static void info(CharSequence log) {
+        info(log, true);
     }
 
 }

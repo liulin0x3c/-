@@ -6,3 +6,4 @@ data/
 icModel.iml
 .idea/
 src/Main.java
+-.iml

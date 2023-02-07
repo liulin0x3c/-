@@ -2,11 +2,11 @@ package common;
 
 
 public final class Entry<T, U> {
-    public T edge;
-    public U exp;
+    public T A;
+    public U B;
 
-    public Entry(T edge, U exp) {
-        this.edge = edge;
-        this.exp = exp;
+    public Entry(T a, U b) {
+        this.A = a;
+        this.B = b;
     }
 }
